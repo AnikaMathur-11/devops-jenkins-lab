@@ -1,0 +1,12 @@
+services:
+  backend:
+    image: localhost:5001/docker-lab-app:v1
+    container_name: docker-lab-backend
+    ports:
+      - "5000:5000"
+
+  frontend:
+    image: nginx:alpine
+    container_name: docker-lab-frontend
+    ports:
+      - "8080:80"
