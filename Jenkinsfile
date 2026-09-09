@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Build') {
             steps {
                 bat 'docker build -t myapp .'
@@ -9,14 +10,14 @@ pipeline {
         }
 
         stage('Test') {
-    steps {
-        bat 'docker run -d --name test-myapp -p 5001:5000 myapp'
-        bat 'timeout /t 5'
-        bat 'docker logs test-myapp'
-        bat 'docker stop test-myapp'
-        bat 'docker rm test-myapp'
-    }
-}
+            steps {
+                bat 'docker rm -f test-myapp 2>nul'
+                bat 'docker run -d --name test-myapp -p 5001:5000 myapp'
+                bat 'docker logs test-myapp'
+                bat 'docker stop test-myapp'
+                bat 'docker rm test-myapp'
+            }
+        }
 
         stage('Deploy') {
             steps {
