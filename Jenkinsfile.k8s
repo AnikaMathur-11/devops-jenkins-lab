@@ -1,0 +1,41 @@
+﻿pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/AnikaMathur-11/devops-jenkins-lab.git'
+            }
+        }
+
+        stage('Validate Cluster') {
+            steps {
+                bat 'kubectl get nodes'
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                bat 'kubectl apply -f deployment.yaml'
+                bat 'kubectl apply -f service.yaml'
+                bat 'kubectl rollout status deployment/docker-lab-app --timeout=120s'
+            }
+        }
+
+        stage('Verify') {
+            steps {
+                bat 'kubectl get deployment,pods,service'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Kubernetes deployment completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed. Review the console output.'
+        }
+    }
+}
