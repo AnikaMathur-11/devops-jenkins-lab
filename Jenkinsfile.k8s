@@ -1,4 +1,4 @@
-﻿node {
+node {
     stage('Checkout') {
         git branch: 'main',
             url: 'https://github.com/AnikaMathur-11/devops-jenkins-lab.git'
